@@ -1,0 +1,73 @@
+% !TeX program = xelatex
+% !TeX encoding = UTF-8
+% !TeX spellcheck = en_US
+% !BIB program = biber
+
+\documentclass[utf8,aspectratio=169,ngerman,english]{beamer}
+\usetheme[darkmode,fancyfonts,totalframenumber,nomathastext,noeulermath,TNF,nojkufooter]{jku}
+
+\usepackage{caption}
+\captionsetup{font=scriptsize}
+\usepackage[plain]{algorithm}
+\usepackage{algorithmicx,algpseudocode}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{booktabs}
+\usepackage{tabularx}
+%\usepackage{pifont}
+%\newcommand{\cmark}{\ding{51}}
+%\newcommand{\xmark}{\ding{55}}
+%\newcommand{\rarr}{\ding{212}}
+%\newcommand{\larr}{\raisebox{\depth}{\rotatebox{180}{\rarr}}}
+\usepackage{csquotes}
+\usepackage[backend=biber,citestyle=authoryear,sortcites=true,style=ACM-Reference-Format]{biblatex}
+
+
+\preto{\bibsetup}{\providecommand*{\insertbiblabel}{}}
+\DeclareFieldFormat*{title}{#1}
+\DeclareFieldFormat*{booktitle}{#1}
+\DeclareFieldFormat*{journaltitle}{#1}
+\setcounter{biburlnumpenalty}{100}
+\setcounter{biburllcpenalty}{100}
+\setcounter{biburlucpenalty}{100}
+
+% custom commands
+\DeclarePairedDelimiter\Set\{\}
+
+\addbibresource{references.bib}
+\begin{document}
+
+\title{Watermarks for Language Models}
+\subtitle{Seminar in AI}
+
+\institute{Institute for Application-oriented Knowledge Processing}
+\institutecode{FAW}
+
+\author{Tim Toller}
+
+\date[15.05.2025]{} % use this to set the date except for the title page (effectively in the footer only)
+\footerdate{}
+\maketitle
+
+% \begin{frame}{Outline}
+%     \tableofcontents
+% \end{frame}
+
+\section{Motivation}
+% \input{./sections/motivation.tex}
+\section{An introduction to watermarking}
+% \input{./sections/introduction_to_watermarking.tex}
+\section{Benchmarkings and comparisons}
+% \input{./sections/benchmarkings.tex}
+\section{Outlook and discussion}
+% \input{./sections/outlook.tex}
+
+\begin{frame}[allowframebreaks]{References}
+    \setbeamerfont{bibliography item}{size={\footnotesize}}
+    \AtNextBibliography{\footnotesize}
+    \printbibliography
+\end{frame}
+
+\jkulogo
+\end{document}
+\endinput
