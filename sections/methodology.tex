@@ -1,0 +1,85 @@
+\begin{frame}{Watermark Generation: \texttt{generate-shift}}
+    \begin{block}{Key ingredients}
+        \begin{itemize}
+            \item \textbf{Random key sequence} $\xi\sim \mathrm{Uniform}[0,1]^{n\times|\mathcal V|}$
+            \item \textbf{Exp-Min sampling} (\texttt{Decoder}) ensures distortion-free draws
+            \item \textbf{Shifted subsequence}: pick offset $\tau\sim\mathrm{Uniform}([0,\dots,n-1])$
+            \item Generate $m$ tokens via
+                  \[
+                      \texttt{generate-shift}(\mathrm{LM},\text{Decoder},\,\text{prompt},\xi)
+                      = \texttt{generate}(\mathrm{LM},\text{Decoder},\,\text{prompt},\,\xi_\tau)
+                  \]
+                  where $\xi_\tau[i]=\xi_{(i+\tau)\bmod n}$
+        \end{itemize}
+    \end{block}
+    \vspace{1em}
+    \textbf{Why shift?}
+    \begin{itemize}
+        \item Avoids stateful tracking.
+        \item Every block of $m$ tokens uses fresh codeword subsequence.
+    \end{itemize}
+\end{frame}
+
+% Exp-Min Decoder
+\begin{frame}{Exp-Min Decoder (Distortion-free Sampling)}
+    \begin{itemize}
+        \item Given token distribution $p(\cdot)$ and random vector $\xi\in[0,1]^{|\mathcal V|}$:
+              \[
+                  \mathrm{Decode}(p,\xi)
+                  = \arg\min_{t\in\mathcal V}\Big[-\tfrac{1}{p(t)}\log \xi_t\Big].
+              \]
+        \item \textbf{Guarantee:} Output token $\sim p(\cdot)$ exactly.
+        \item Underlies both watermark generation and vanilla sampling.
+    \end{itemize}
+\end{frame}
+
+% Detection: expCost & detect
+\begin{frame}{Watermark Detection: Cost Alignment}
+    \begin{block}{Exponential-cost function}
+        \[
+            \mathrm{expCost}(\mathrm{text},\xi,\text{offset})
+            = \sum_{i=1}^{|\text{text}|}\log\bigl(1 - \xi_{(i+\text{offset})\bmod n,\,\text{text}_i}\bigr).
+        \]
+    \end{block}
+    \begin{itemize}
+        \item For each possible shift $j$, compute cost $c_j$.
+        \item \texttt{detect} returns $\min_j c_j$.
+        \item Low cost $\Rightarrow$ strong alignment with key $\xi\;\Longrightarrow$ watermark present.
+    \end{itemize}
+\end{frame}
+
+% Levenshtein‐robust detection
+\begin{frame}{Robust Detection with \(\mathrm{expLevenshteinCost}\)}
+    \begin{itemize}
+        \item Allows insertions/deletions in text.
+        \item Define DP matrix \(A\in\mathbb R^{(m+1)\times(m+1)}\):
+              \[
+                  A[i,k] = \min\bigl\{
+                  A[i-1,k]+\gamma,\; A[i,k-1]+\gamma,\; A[i-1,k-1] + \log(1-\xi_{\dots,\text{text}_{i}})\bigr\}.
+              \]
+        \item Final cost $=A[m,m]$.
+        \item Significantly improves robustness to edits.
+    \end{itemize}
+\end{frame}
+
+% Theoretical Guarantee
+\begin{frame}{Theoretical Detectability}
+    \begin{itemize}
+        \item Lemma: For true watermarked text, alignment cost w.r.t.\ correct $\xi$ is {\bf provably} lower than with any independent $\xi'$ (w.h.p.).
+        \item Watermark potential
+              \[
+                  \alpha(\text{text})
+                  = 1 - \frac1{|\text{text}|} \sum_{i=1}^{|\text{text}|} p(\text{text}_i\mid\text{text}_{1:i-1}).
+              \]
+        \item Detection power $\propto \alpha(\text{text})$.
+    \end{itemize}
+\end{frame}
+
+% Empirical Highlights
+\begin{frame}{Empirical Results (Highlights)}
+    \begin{itemize}
+        \item Detect watermark in 35 tokens with $p<0.01$ after 40-50\% random edits (OPT-1.3B, LLaMA-7B).
+        \item Paraphrase robustness: detectable after back-translation.
+        \item Instruction-tuned models (e.g. Alpaca-7B) have lower watermark potential, thus harder to watermark.
+    \end{itemize}
+\end{frame}
