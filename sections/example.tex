@@ -9,10 +9,10 @@
             \hline
             model                         & huggyllama/llama-7b \\
             prompt                        & ``Steganography is" \\
-            m (generated text length)     & 80 tokens           \\
+            m (generated text length)     & 100 tokens          \\
             n (watermark sequence length) & 256 tokens          \\
             key                           & 42                  \\
-            seed                          & 0                   \\
+            seed                          & 1                   \\
         \end{tabular}
         \caption{Parameters for our watermarking example}
     \end{table}
@@ -31,21 +31,21 @@
 \begin{frame}[fragile]{Step 1: Generating the watermark}
     \scriptsize
     \begin{tabular}{p{0.48\textwidth} p{0.48\textwidth}}
-        \textbf{Plain/Control text (p=0.7228)} & \textbf{Watermarked (p=0.0099)}                                                                                                                                                                                                                                                                                                                                                                                                                                       \\
+        \textbf{Plain/Control text (p=0.7228)} & \textbf{Watermarked (p=0.0099)}                                                                                                                                                                                                                                                                                                                                                                        \\
         \hline
         Steganography is a technique used to hide secret messages within an image, a song, or other media that are not usually used to convey secure information. Steganography can be used to conceal the fact that there is a secret message in the first place, but it can also be used to transmit secret messages. There are many different methods of encoding secret messages in an image. Some of the methods are: Compression method (also called Spread spectrum) The key challenge with steganography is embedding
-                                               & Steganography is the embedding of a file within another file, so that only someone with the correct knowledge can see it. It is the opposite of encryption. The term comes from \foreignlanguage{greek}{στεφάνω} (stefano) and \foreignlanguage{greek}{γραφό} (grapho) and means “to cover with wax”, because ancient Greeks hid their secret messages inside other documents by rubbing the ink. Stfano is the Greek adjective. Any content you embed within another
+                                               & Steganography is the embedding of a file within another file, so that only someone with the correct knowledge can see it. It is the opposite of encryption. The term comes from  (stefano) and (grapho) and means “to cover with wax”, because ancient Greeks hid their secret messages inside other documents by rubbing the ink. Stfano is the Greek adjective. Any content you embed within another
     \end{tabular}
 \end{frame}
 
 \begin{frame}{Step 2: Editing the text}
-    We want to ensure the watermark is robust against changes to do this, we translate the text into french and back again. This should not change the meaning of the text, but it will change the words used.
+    We want to ensure the watermark is robust against changes. To do this, we translate the text into French, Russian and back again.
 
     \scriptsize
     \begin{tabular}{p{0.48\textwidth} p{0.48\textwidth}}
-        \textbf{Plain/Control text (p=0.7228)}                                                                                                                                                                                                                                                                                                                                                                                                                                & \textbf{Watermarked (p=0.0099)}                                                                                                                                                                                                                                                                                                                                                                                  \\
+        \textbf{Watermarked (p=0.0099)}                                                                                                                                                                                                                                                                                                                                                                       & \textbf{Edited (p=0.0099)}                                                                                                                                                                                                                                                                                                                                                                         \\
         \hline
-        Steganography is the embedding of a file within another file, so that only someone with the correct knowledge can see it. It is the opposite of encryption. The term comes from \foreignlanguage{greek}{στεφάνω} (stefano) and \foreignlanguage{greek}{γραφό} (grapho) and means “to cover with wax”, because ancient Greeks hid their secret messages inside other documents by rubbing the ink. Stfano is the Greek adjective. Any content you embed within another & Steganography is the inclusion of a file in another file, so only someone who has the right knowledge could see this. This is the opposite of encryption. The term comes from στεφανω (stefano) and γραφó (grapho) and means “wax cover” because the ancient Greeks hid their secret messages within other documents, rubbing the ink.The camp is a Greek adjective. Any content that you integrate into another
+        Steganography is the embedding of a file within another file, so that only someone with the correct knowledge can see it. It is the opposite of encryption. The term comes from (stefano) and (grapho) and means “to cover with wax”, because ancient Greeks hid their secret messages inside other documents by rubbing the ink. Stfano is the Greek adjective. Any content you embed within another & Steganography is the inclusion of a file in another file, so only someone who has the right knowledge could see this. This is the opposite of encryption. The term comes from (stefano) and (grapho) and means “wax cover” because the ancient Greeks hid their secret messages within other documents, rubbing the ink.The camp is a Greek adjective. Any content that you integrate into another
     \end{tabular}
 \end{frame}
 
