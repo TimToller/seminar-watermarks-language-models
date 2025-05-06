@@ -18,58 +18,28 @@
     \end{table}
 \end{frame}
 
-
-\begin{frame}{Step 1: Generating the watermark}
-    The first step is to generate a uniformly random key-sequence $\xi \sim \mathrm{Uniform}[0,1]^{n \times |\mathcal{V}|}$ using our Mersenne Twister seeded by \texttt{key}.  We then use $\xi$ inside the decoder $\mathrm{Decode}(p,\xi_i)$ to sample tokens.
-
-    Two popular decoding strategies are:
-    \begin{itemize}
-        \item \textbf{Inverse Transform Sampling (ITS)}: for each token, draw $u\sim\mathrm{Uniform}(0,1)$ and pick the smallest token $t$ such that $\sum_{j\le t}p(j)\ge u$.  ITS exactly recovers the model distribution but requires sorting or cumulative sums.
-        \item \textbf{Exp–Min Trick (EXP)}: for each vocabulary token $v$, compute independent exponential random variables $E_v=-\log\,\xi_v/p(v)$.  Then select $\arg\min_v E_v$.  One can show this also yields $t\sim p$, and it avoids cumulative sums by a simple \emph{min} operation over exponentials.  Moreover, EXP readily extends to dynamic programming for edit-robust detection.
-    \end{itemize}
-
-    In our example, we use the \emph{Exp–Min} method due to its implementation simplicity and natural extension to Levenshtein-based costs.
-\end{frame}
-
-
-\begin{frame}[fragile]{Step 1: Generating the watermark (code)}
+\begin{frame}[fragile]{Step 1: Generating the watermark}
     \scriptsize
     \begin{tabular}{p{0.48\textwidth} p{0.48\textwidth}}
-        \textbf{Plain/Control text (p=0.7228)}                                                                                                                          & \textbf{Watermarked (p=0.0099)}                                                                                                 \\
+        \textbf{Plain/Control text (p=0.8020)}                                                                                                                                                                                                                                                                                                                                                      & \textbf{Watermarked (p=0.0099)}                                                                                                                                                                                                                                                                                                                                                       \\
         \hline
-        Steganography is a technique used to hide secret messages within an image, a song, or other media that are not usually used to convey secure information. \dots & Steganography is the embedding of a file within another file, so that only someone with the correct knowledge can see it. \dots
+        Steganography is a technique used to hide secret messages within an image, a song, or other media that are not usually used to convey secure information. Steganography can be used to conceal the fact that there is a secret message in the first place, but it can also be used to transmit secret messages. There are many different methods of encoding secret messages in an image... & Steganography is the practice of hiding information or data inside another file or software even if a malicious party tries their hardest to reveal the hidden codes. It basically closes the door to hackers and only allotts access to those who are suppose to take it. This makes it, in a sense, lie to the user and or viewer of the data and anyone trying to open the file...
     \end{tabular}
 \end{frame}
 
 
 \begin{frame}{Step 2: Editing the text}
-    We want to ensure the watermark is robust against rewriting or paraphrasing.  In practice, we translate the watermarked text into French and Russian, then translate back to English.
+    We want to ensure the watermark is robust against rewriting or paraphrasing.  To test this, we translate the watermarked text into different languages and back. Here ($EN \rightarrow FR \rightarrow EN \rightarrow RU \rightarrow EN$).
 
     \scriptsize
     \begin{tabular}{p{0.48\textwidth} p{0.48\textwidth}}
-        \textbf{Watermarked (p=0.0099)}                                                                                                 & \textbf{Edited (p=0.0099)}                                                                                                  \\
+        \textbf{Watermarked (p=0.0099)}                                                                                                                                                                                                                                                                                                                                                       & \textbf{Edited (p=0.0099)}                                                                                                                                                                                                                                                                                                                            \\
         \hline
-        Steganography is the embedding of a file within another file, so that only someone with the correct knowledge can see it. \dots & Steganography is the inclusion of a file in another file, so only someone who has the right knowledge could see this. \dots
+        Steganography is the practice of hiding information or data inside another file or software even if a malicious party tries their hardest to reveal the hidden codes. It basically closes the door to hackers and only allotts access to those who are suppose to take it. This makes it, in a sense, lie to the user and or viewer of the data and anyone trying to open the file... & Steganography is the practice of hiding information or data in another file or software, even if the malicious side tries to open hidden codes. In essence, it closes the pirate door and attributes only access to those who should take it. This is, in a sense, to lie to the user and / or a data viewer and anyone who tries to open the file...
     \end{tabular}
 \end{frame}
 
-
 \begin{frame}{Step 3: Checking the watermark}
-    To detect the watermark, we compute an \emph{alignment cost} between the candidate text $T$ and each cyclic shift of the key-sequence $\xi$.  The simplest cost is
-    \[
-        \mathrm{expCost}(T,\xi,\tau) = \sum_{i=1}^{|T|} -\log\bigl(1 - \xi_{(i+\tau)\bmod n}[T_i]\bigr),
-    \]
-    which is low when tokens follow the EXP selection uses.  For higher robustness, we use a
-    \emph{Levenshtein-based cost}:
-    \[
-        \mathrm{expLevCost}(T,\xi,\tau) = \min_{\pi\in\mathrm{align}} \sum_{(i,j)\in\pi} c(i,j),
-    \]
-    where each substitution carries cost $-\log(1-\xi_{(j+\tau)\bmod n}[T_i])$, and each insertion or deletion costs a fixed $\gamma$
-
-\end{frame}
-
-\begin{frame}{Step 3: Checking the watermark}
-    We then take the minimum cost over all offsets $\tau$, derive a p-value by permutation testing.
 
     To reiterate the p-values we obtained, we have:
 
@@ -78,11 +48,13 @@
         \begin{tabular}{ccc}
             \textbf{Plain/Control} & \textbf{Watermarked} & \textbf{Edited} \\
             \hline
-            p=0.7228               & p=0.0099             & p=0.0099
+            p=0.8020               & p=0.0099             & p=0.0099
         \end{tabular}
     \end{center}
 
     \bigskip
 
     A text is considered watermarked if $p<0.01$.
+
+    As expected, the control text is not watermarked, while the watermarked and edited texts are both watermarked.
 \end{frame}
