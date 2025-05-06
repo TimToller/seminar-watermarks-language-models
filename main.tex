@@ -4,14 +4,8 @@
 % !BIB program = biber
 
 \documentclass[utf8,aspectratio=169,ngerman,english]{beamer}
-\usetheme[darkmode,fancyfonts,totalframenumber,nomathastext,noeulermath,TNF,nojkufooter]{jku}
+\usetheme[darkmode,fancyfonts,totalframenumber,mathastext,TNF,nojkufooter]{jku}
 
-\usepackage{caption}
-\captionsetup{font=scriptsize}
-\usepackage[plain]{algorithm}
-\usepackage{algorithmicx,algpseudocode}
-\usepackage{amsmath}
-\usepackage{mathtools}
 \usepackage{booktabs}
 \usepackage{tabularx}
 %\usepackage{pifont}
@@ -20,7 +14,6 @@
 %\newcommand{\rarr}{\ding{212}}
 %\newcommand{\larr}{\raisebox{\depth}{\rotatebox{180}{\rarr}}}
 \usepackage{csquotes}
-% \usepackage{pdfpages}
 \usepackage[backend=biber,citestyle=authoryear,sortcites=true,style=ACM-Reference-Format]{biblatex}
 
 
@@ -31,9 +24,6 @@
 \setcounter{biburlnumpenalty}{100}
 \setcounter{biburllcpenalty}{100}
 \setcounter{biburlucpenalty}{100}
-
-% custom commands
-\DeclarePairedDelimiter\Set\{\}
 
 \addbibresource{references.bib}
 \begin{document}
