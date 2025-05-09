@@ -16,7 +16,6 @@
 \usepackage{csquotes}
 \usepackage[backend=biber,citestyle=authoryear,sortcites=true,style=ACM-Reference-Format]{biblatex}
 
-
 \preto{\bibsetup}{\providecommand*{\insertbiblabel}{}}
 \DeclareFieldFormat*{title}{#1}
 \DeclareFieldFormat*{booktitle}{#1}
@@ -46,10 +45,11 @@
 
 \section{Introduction \& Motivation}
 \input{./sections/motivation.tex}
-\section{Example}
+\section{Methodology}
+\input{./sections/methodology.tex}
+
+\section{Hands-on Example}
 \input{./sections/example.tex}
-\section{Benchmarkings and comparisons}
-% \input{./sections/benchmarkings.tex}
 \section{Outlook and discussion}
 % \input{./sections/outlook.tex}
 
