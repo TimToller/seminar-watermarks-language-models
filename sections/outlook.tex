@@ -1,10 +1,9 @@
-\begin{frame}{Conclusion \& Future Work}
+\begin{frame}{Outlook \& Personal opinion}
     \begin{itemize}
-        \item \textbf{Conclusion:} Watermarking is a viable solution to ensure the integrity of LLMs.
-        \item \textbf{Key findings:}
-              \begin{itemize}
-                  \item Watermarking can be used to detect and prevent unauthorized use of LLMs.
-                  \item The proposed method is effective in embedding and detecting watermarks.
-              \end{itemize}
+        \item The \emph{Kuditipudi et al.}\ watermark described in this presentation works only if the \textbf{LM Provider} and the \textbf{detector} work together. This is unreliable once users move to open-source LMs or switch providers.
+
+        \item Beyond scrubbing a watermark, we may want to \emph{prove} human authorship or certify other attributes, each needing a different embed/detect design and careful control of false positives/negatives.
+
+        \item Research should target provider-agnostic, robust schemes. Adoption could arrive through regulation or market incentives—major LMs may already watermark invisibly.
     \end{itemize}
 \end{frame}

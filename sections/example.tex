@@ -29,15 +29,36 @@
 
 
 \begin{frame}{Step 2: Editing the text}
-    We want to ensure the watermark is robust against rewriting or paraphrasing.  To test this, we translate the watermarked text into different languages and back. Here ($EN \rightarrow FR \rightarrow EN \rightarrow RU \rightarrow EN$).
+    We want to ensure the watermark is robust against rewriting or paraphrasing.
+    To test this, we translate the watermarked text into different languages and back
+    ($EN \rightarrow FR \rightarrow EN \rightarrow RU \rightarrow EN$). This results in about $25\%$ of the text being altered with the content staying mostly the same.
 
     \scriptsize
     \begin{tabular}{p{0.48\textwidth} p{0.48\textwidth}}
-        \textbf{Watermarked (p=0.0099)}                                                                                                                                                                                                                                                                                                                                                       & \textbf{Edited (p=0.0099)}                                                                                                                                                                                                                                                                                                                            \\
-        \hline
-        Steganography is the practice of hiding information or data inside another file or software even if a malicious party tries their hardest to reveal the hidden codes. It basically closes the door to hackers and only allotts access to those who are suppose to take it. This makes it, in a sense, lie to the user and or viewer of the data and anyone trying to open the file... & Steganography is the practice of hiding information or data in another file or software, even if the malicious side tries to open hidden codes. In essence, it closes the pirate door and attributes only access to those who should take it. This is, in a sense, to lie to the user and / or a data viewer and anyone who tries to open the file...
+        \textbf{Watermarked (p=0.0099)} & \textbf{Edited (p=0.0099)}  \\\hline
+
+        % -------- WATERMARKED with deletions --------
+        Steganography is the practice of hiding information or data
+        \textcolor{red}{\sout{inside}} another file or software
+        even if \textcolor{red}{\sout{a malicious party tries their hardest to reveal the hidden codes}}.
+        It \textcolor{red}{\sout{basically}} closes the \textcolor{red}{\sout{door to hackers}}
+        and only \textcolor{red}{\sout{allotts}} access to those who
+        \textcolor{red}{\sout{are suppose to take it}}.
+        This \textcolor{red}{\sout{makes it,}} in a sense, lie to the user
+        \textcolor{red}{\sout{and or viewer of the data}} and anyone
+        \textcolor{red}{\sout{trying}} to open the file\ldots
+                                        &
+        % -------- EDITED with additions --------
+        Steganography is the practice of hiding information or data
+        \textcolor{blue}{in} another file or software\textcolor{blue}{,}
+        even if \textcolor{blue}{the malicious side tries to open hidden codes}.
+        \textcolor{blue}{In essence,} it closes the \textcolor{blue}{pirate door}
+        and \textcolor{blue}{attributes} only access to those who \textcolor{blue}{should} take it.
+        This is, in a sense, to lie to the user \textcolor{blue}{/ or a data viewer}
+        and anyone \textcolor{blue}{who tries} to open the file\ldots \\
     \end{tabular}
 \end{frame}
+
 
 \begin{frame}{Step 3: Checking the watermark}
 
