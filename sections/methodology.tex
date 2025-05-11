@@ -1,20 +1,17 @@
 \begin{frame}{Methods}
     \begin{itemize}
-        \item \textbf{Distortion–free decoding (Exp-Min).}
-              For a language-model next–token distribution
-              \(p:\mathcal V\!\to\![0,1]\) and a private key
-              \(\xi_i\!\sim\!\text{Uniform}(0,1)^{|\mathcal V|}\),
-              select
+        \item \textbf{Distortion-free decoding (Exp-Min).}
+              For a language-model next-token distribution
+              \(p:\mathcal V \to [0,1]\) and a private key
+              \(\xi_i \sim \mathcal U(0,1)^{|\mathcal V|}\), select
               \[
                   t_i^\star \;=\;
                   \operatorname*{arg\,min}_{t\in\mathcal V}
-                  \Bigl\{-\frac{\ln\xi_{i,t}}{p(t)}\Bigr\},
+                  \left\{-\dfrac{\ln\xi_{i,t}}{p(t)}\right\},
               \]
-              which samples \(\textstyle t_i^\star\sim p\) \emph{without
-                  altering \(p\)}.
-        \item \textbf{Inverse-transform sampling} (ITS) baseline
-        \item Robustness with \textbf{Levenshtein distance}
-
+              which samples \(t_i^\star\sim p\) \emph{without altering \(p\)}. This method will be used for the following examples.
+        \item \textbf{Inverse-transform sampling (ITS) baseline.} An alternative method to sample from the token distribution.
+        \item Robustness with \textbf{Levenshtein distance}.
     \end{itemize}
 \end{frame}
 
@@ -22,62 +19,60 @@
     \begin{figure}
         \centering
         \includegraphics[width=0.8\linewidth]{./images/experiment-method-comparison.png}
-        \caption{\footnotesize Comparing Exp-min \& ITS (with and without Levenshtein) and Kirchenbauer et al. \cite{kuditipudi2023robustarticle}.}
+        \caption{\footnotesize Comparing Exp-Min \& ITS (with and without Levenshtein) and Kirchenbauer et al. \cite{kuditipudi2023robustarticle}.}
         \label{fig:method-comparison}
     \end{figure}
 \end{frame}
 
-%-------------------------------------------------
-\begin{frame}{Generation Process}
+\begin{frame}{Generation process}
     \begin{enumerate}
         \item \textbf{Key generation.}\;
-              A $n$-token private key \(\xi\) is drawn once and stored
-              (\(\xi_i\!\sim\!\text{U}(0,1)^{|\mathcal V|}\)).
+              Seed a Mersenne–Twister PRNG with the secret key and draw an
+              \(n\)-element stream
+              \(\bigl(\xi_i\sim\mathcal U(0,1)^{|\mathcal V|}\bigr)\),
+              which is stored for later use.
         \item \textbf{Random shift.}\;
-              Before each generation, sample an offset
-              \(\tau\sim\text{U}\{0,n-1\}\) and set
+              At generation time, obtain a random offset
+              \(\tau\sim\mathcal U\{0,n-1\}\) (independent of the key) and
+              set
               \[
-                  \texttt{shift}(\xi,\tau)
-                  \;=\;
+                  \texttt{shift}(\xi,\tau)=
                   (\xi_\tau,\xi_{\tau+1},\dots,\xi_{\tau+m-1}),
               \]
-              implemented with a Mersenne-Twister seeded by the same private
-              key.  The shift keeps the watermark distortion-free but
-              prevents key-reuse across calls.
+              where \(m\) is the number of tokens to be generated.
         \item \textbf{Token sampling.}\;
-              At step \(i\) use Exp-Min with the shifted
-              key vector \(\xi_{i}\) to draw
-              \(t_i^\star\).  High-probability LM tokens remain likely;
-              ties between similarly-probable tokens are biased toward
-              lower \(\xi\) values, yielding the hidden correlation.
+              At step \(i\) apply Exp-Min with the shifted key vector
+              \(\xi_i\) to draw \(t_i^\star\).
+              High-probability LM tokens remain likely; ties between
+              similarly probable tokens are biased toward
+              \emph{higher} \(\xi\) values, yielding the hidden correlation.
         \item \textbf{Detection.}\;
-              Given text \(\mathbf t\), compute
-              cost and compare it to the
-              same cost under random surrogate keys; a small p-value
+              Given text \(\mathbf t\), compute the \emph{Levenshtein-cost} and compare it with
+              the same cost under random surrogate keys; a small \(p\)-value
               (\(p<0.01\)) signals a watermark.
     \end{enumerate}
 \end{frame}
 
-%-------------------------------------------------
 \begin{frame}{Token-selection example}
     \small
-    Prompt: \emph{Steganography is the practice of hiding}, \(\tau=41\),
+    Prompt: \emph{Steganography is the practice of hiding}, \(\tau=41\)~\cite{toller2025watermarking-notebook}
+
     \begin{center}
-        \begin{tabular}{lcccc}
-            \textbf{token}      &
-            \(\,p_{\text{LM}}\) &
-            \(\xi\)             &
-            \(p_{\text{WM}}\propto e^{-\frac{\ln\xi}{p_{\text{LM}}}}\) \\ \hline
-            messages            & 0.2000 & 0.5555 & 0.1517             \\
-            information         & 0.1943 & 0.7710 & \textbf{0.7513}    \\
-            data                & 0.1500 & 0.3428 & 0.0023             \\
-            a                   & 0.1323 & 0.2594 & 0.0001             \\
-            secret              & 0.1252 & 0.1291 & $\ll10^{-4}$       \\
-            the                 & 0.0290 & 0.8610 & 0.0165             \\
-            ...                 & ...    & ...    & ...                \\
+        \begin{tabular}{lccc}
+            \textbf{token} & \(p_{\text{LM}}\) & \(\xi\) &
+            \(w(t)\propto\exp\!\bigl(-\tfrac{\ln\xi}{p_{\text{LM}}}\bigr)\) \\\hline
+            messages       & 0.2000            & 0.5555  & 0.1517           \\
+            information    & 0.1943            & 0.7710  & \textbf{0.7513}  \\
+            data           & 0.1500            & 0.3428  & 0.0023           \\
+            a              & 0.1323            & 0.2594  & 0.0001           \\
+            secret         & 0.1252            & 0.1291  & \(\ll 10^{-4}\)  \\
+            the            & 0.0290            & 0.8610  & 0.0165           \\
+            \dots          & \dots             & \dots   & \dots            \\
         \end{tabular}
     \end{center}
-    The Exp-Min decoder selects \textbf{``information''}. Note that \emph{messages} and \emph{information} had similar
-    LM probabilities, but the $\xi$ factor of \emph{information}
-    makes it far more likely under the watermark. Unlikely tokens don't suddenly turn likely through the watermark, making it distoriton free.
+
+    \emph{messages} and \emph{information} have similar LM probabilities, but
+    the larger \(\xi\) for \emph{information} gives it bias under
+    the watermark. Unlikely tokens never become likely under the watermark, so sampling remains
+    distortion-free.
 \end{frame}

@@ -1,20 +1,20 @@
 \begin{frame}{Hands-on example}
-    We will now walk through a simple, yet hands-on example of a distortion-free watermarking protocol based on \cite{kuditipudi2023robustarticle}.
+    We will now walk through a simple, yet full hands-on example of a distortion-free watermarking protocol based on \cite{kuditipudi2023robustarticle}.
 
-    First, we must define some parameters:
     \begin{table}[h]
         \centering
         \begin{tabular}{ll}
-            \textbf{Parameter}            & \textbf{Value}      \\
+            \textbf{Parameter}            & \textbf{Value}        \\
             \hline
-            model                         & huggyllama/llama-7b \\
-            prompt                        & ``Steganography is" \\
-            m (generated text length)     & 100 tokens          \\
-            n (watermark sequence length) & 256 tokens          \\
-            key                           & 42                  \\
-            seed                          & 1                   \\
+            model                         & huggyllama/llama-7b   \\
+            prompt                        & ``Steganography is"   \\
+            m (generated text length)     & 100 tokens            \\
+            n (watermark sequence length) & 256 tokens            \\
+            key                           & 42                    \\
+            seed                          & 1                     \\
+            method                        & Exp-Min + Levenshtein \\
         \end{tabular}
-        \caption{Parameters for our watermarking example}
+        \caption{\footnotesize Parameters for our watermarking example \cite{toller2025watermarking-notebook}}
     \end{table}
 \end{frame}
 
