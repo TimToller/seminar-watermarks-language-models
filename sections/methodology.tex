@@ -1,6 +1,15 @@
-\begin{frame}{Methods}
+\begin{frame}{Method comparisons}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.9\linewidth]{./images/experiment-method-comparison.png}
+        \caption{\footnotesize Comparing Exp-Min \& ITS (with and without Levenshtein) and Kirchenbauer et al. \cite{kuditipudi2023robustarticle}.}
+        \label{fig:method-comparison}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Preferred Method}
     \begin{itemize}
-        \item \textbf{Distortion-free decoding (Exp-Min).}
+        \item Distortion-free decoding using \textbf{Exponential-Min}.
               For a language-model next-token distribution
               \(p:\mathcal V \to [0,1]\) and a private key
               \(\xi_i \sim \mathcal U(0,1)^{|\mathcal V|}\), select
@@ -10,19 +19,11 @@
                   \left\{-\dfrac{\ln\xi_{i,t}}{p(t)}\right\},
               \]
               which samples \(t_i^\star\sim p\) without altering \(p\). This method will be used for the following examples.
-        \item \textbf{Inverse-transform sampling (ITS) baseline.} An alternative method to sample from the token distribution.
-        \item Robustness with \textbf{Levenshtein distance}.
+        \item Robustness through \textbf{Levenshtein cost}.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Method comparisons}
-    \begin{figure}
-        \centering
-        \includegraphics[width=0.8\linewidth]{./images/experiment-method-comparison.png}
-        \caption{\footnotesize Comparing Exp-Min \& ITS (with and without Levenshtein) and Kirchenbauer et al. \cite{kuditipudi2023robustarticle}.}
-        \label{fig:method-comparison}
-    \end{figure}
-\end{frame}
+
 
 \begin{frame}{Generation process}
     \begin{enumerate}
