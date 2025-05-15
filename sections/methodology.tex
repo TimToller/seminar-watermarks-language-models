@@ -9,7 +9,7 @@
 
 \begin{frame}{Preferred Method}
     \begin{itemize}
-        \item Distortion-free decoding using \textbf{Exponential-Min}.
+        \item Distortion-free decoding using \textbf{Exponential-Min} sampling.
               For a language-model next-token distribution
               \(p:\mathcal V \to [0,1]\) and a private key
               \(\xi_i \sim \mathcal U(0,1)^{|\mathcal V|}\), select
@@ -20,6 +20,7 @@
               \]
               which samples \(t_i^\star\sim p\) without altering \(p\). This method will be used for the following examples.
         \item Robustness through \textbf{Levenshtein cost}.
+        \item With these methods, the watermark starts to be reliable at around \textbf{m > 35} generated tokens and stays robust even after corrupting \textbf{40\%-50\%} of the text.
     \end{itemize}
 \end{frame}
 

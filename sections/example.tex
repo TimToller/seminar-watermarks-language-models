@@ -8,8 +8,8 @@
             \hline
             model                         & huggyllama/llama-7b   \\
             prompt                        & ``Steganography is"   \\
-            m (generated text length)     & 100 tokens            \\
-            n (watermark sequence length) & 256 tokens            \\
+            m (generated text length)     & 100                   \\
+            n (watermark sequence length) & 256                   \\
             key                           & 42                    \\
             seed                          & 1                     \\
             method                        & Exp-Min + Levenshtein \\
@@ -77,7 +77,7 @@
 
     \bigskip
 
-    A text is considered watermarked if $p<0.01$.
+    A text is considered watermarked if \textbf{p < 0.01}.
 
     As expected, the control text is not watermarked, while the watermarked and edited texts are both watermarked.
 \end{frame}
